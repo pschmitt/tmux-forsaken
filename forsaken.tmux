@@ -20,14 +20,16 @@ main() {
   key_kill_empty_panes="$(get_tmux_option @forsaken-kill-empty-panes)"
   key_kill_windows_ttr="$(get_tmux_option @forsaken-kill-windows-ttr)"
 
-  if [[ -n "$key_kill_windows_ttr" ]]
-  then
-    tmux bind-key "$key_kill_windows_ttr" run-shell -b "${swd}/tmux-kill-windows-to-the-right.sh"
-  fi
-
   if [[ -n "$key_kill_empty_panes" ]]
   then
+    tmux unbind "$key_kill_empty_panes"
     tmux bind-key "$key_kill_empty_panes" run-shell -b "${swd}/tmux-kill-empty-panes.sh"
+  fi
+
+  if [[ -n "$key_kill_windows_ttr" ]]
+  then
+    tmux unbind "$key_kill_windows_ttr"
+    tmux bind-key "$key_kill_windows_ttr" run-shell -b "${swd}/tmux-kill-windows-to-the-right.sh"
   fi
 }
 
