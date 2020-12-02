@@ -21,8 +21,8 @@ main() {
 
   swd="$(readlink -f "$(dirname "$0")")/scripts"
 
-  key_kill_empty_panes="$(get_tmux_option @forsaken-kill-empty-panes)"
-  key_kill_windows_ttr="$(get_tmux_option @forsaken-kill-windows-ttr)"
+  key_kill_empty_panes="$(get_tmux_option @forsaken-kill-empty-panes-key)"
+  key_kill_windows_ttr="$(get_tmux_option @forsaken-kill-windows-ttr-key)"
   confirm_kill_empty_panes="$(get_tmux_option @forsaken-kill-empty-panes-confirm)"
   confirm_kill_windows_ttr="$(get_tmux_option @forsaken-kill-windows-ttr-confirm)"
 

@@ -16,16 +16,16 @@ set -g @plugin 'pschmitt/tmux-forsaken'
 ## Configuration
 
 To have this plugin do anything you need to at least set one of
-`forsaken-kill-empty-panes` or `forsaken-kill-windows-ttr`.
+`forsaken-kill-empty-panes-key` or `forsaken-kill-windows-ttr-key`.
 
 They should contain the key that will be bound to respectively killing all
 empty panes and killig all windows right to the currently active one.
 
 ### Available options
 
-- `@forsaken-kill-empty-panes`: Key to bind to kill all windows on the right 
+- `@forsaken-kill-empty-panes-key`: Key to bind to kill all windows on the right 
 of the current one
-- `@forsaken-kill-windows-ttr`: Key to bind to kill all empty panes in the
+- `@forsaken-kill-windows-ttr-key`: Key to bind to kill all empty panes in the
 current session
 - `@forsaken-kill-empty-panes-confirm`: If set this will require a confirmation
 before killig all empty panes. Set to `1` or `true` for the default prompt. Set
