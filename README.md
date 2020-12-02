@@ -19,7 +19,7 @@ To have this plugin do anything you need to at least set one of
 `forsaken-kill-empty-panes-key` or `forsaken-kill-windows-ttr-key`.
 
 They should contain the key that will be bound to respectively killing all
-empty panes and killig all windows right to the currently active one.
+empty panes and killig all windows on the right of the currently active one.
 
 ### Available options
 
