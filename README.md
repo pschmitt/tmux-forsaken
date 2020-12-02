@@ -2,8 +2,8 @@
 
 This tpm plugins provides two scripts:
 
-1. tmux-kill-empty-panes.sh
-2. tmux-kill-window-to-the-right.sh
+1. `tmux-kill-empty-panes.sh`
+2. `tmux-kill-window-to-the-right.sh`
 
 
 # Installation
