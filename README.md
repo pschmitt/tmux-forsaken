@@ -25,10 +25,10 @@ empty panes and killig all windows on the right of the currently active one.
 
 ### Available options
 
-- `@forsaken-kill-empty-panes-key`: Key to bind to kill all windows on the right 
-of the current one
-- `@forsaken-kill-windows-ttr-key`: Key to bind to kill all empty panes in the
+- `@forsaken-kill-empty-panes-key`: Key to bind to kill all empty panes in the
 current session
+- `@forsaken-kill-windows-ttr-key`: Key to bind to kill all windows on the right 
+of the current one
 - `@forsaken-kill-empty-panes-confirm`: If set this will require a confirmation
 before killig all empty panes. Set to `1` or `true` for the default prompt. Set
 to any other value to override the default prompt.
