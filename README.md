@@ -1,5 +1,7 @@
 # tmux-forsaken
 
+![](./kill-windows-ttr.gif)
+
 This tpm plugin provides two scripts:
 
 1. `tmux-kill-empty-panes.sh`
