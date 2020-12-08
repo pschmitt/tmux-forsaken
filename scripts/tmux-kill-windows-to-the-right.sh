@@ -2,6 +2,8 @@
 
 # This will close all windows that are right to the current one
 tmux_close_windows_to_the_right() {
+  local win_id
+
   for win_id in $(tmux list-windows -F '#{window_active} #{window_id}' | \
                   awk '/^1/ { active=1; next } active { print $2 }')
   do
