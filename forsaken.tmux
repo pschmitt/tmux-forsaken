@@ -22,8 +22,10 @@ main() {
   swd="$(readlink -f "$(dirname "$0")")/scripts"
 
   key_kill_empty_panes="$(get_tmux_option @forsaken-kill-empty-panes-key)"
+  key_kill_other_panes="$(get_tmux_option @forsaken-kill-other-panes-key)"
   key_kill_windows_ttr="$(get_tmux_option @forsaken-kill-windows-ttr-key)"
   confirm_kill_empty_panes="$(get_tmux_option @forsaken-kill-empty-panes-confirm)"
+  confirm_kill_other_panes="$(get_tmux_option @forsaken-kill-other-panes-confirm)"
   confirm_kill_windows_ttr="$(get_tmux_option @forsaken-kill-windows-ttr-confirm)"
 
   if [[ -n "$key_kill_empty_panes" ]]
@@ -72,6 +74,31 @@ main() {
     fi
 
     tmux bind-key "$key_kill_windows_ttr" "${action[@]}"
+
+    message=""
+  fi
+
+  if [[ -n "$key_kill_other_panes" ]]
+  then
+    action=(run-shell -b "${swd}/tmux-kill-other-panes.sh")
+
+    case "$confirm_kill_other_panes" in
+      1|yes|true)
+        message="Kill all panes except the current one?"
+        ;;
+      *)
+        message="$confirm_kill_other_panes"
+        ;;
+    esac
+
+    tmux unbind "$key_kill_other_panes"
+
+    if [[ -n "$message" ]]
+    then
+      action=(confirm-before -p "$message" "${action[*]}")
+    fi
+
+    tmux bind-key "$key_kill_other_panes" "${action[@]}"
 
     message=""
   fi
