@@ -4,7 +4,7 @@ tmux_get_option() {
   tmux show-options -g | awk "/^${1} / {print \$2}"
 }
 
-tmux_get_defaul_shell() {
+tmux_get_default_shell() {
   tmux_get_option "default-shell"
 }
 
@@ -24,7 +24,7 @@ tmux_kill_empty_panes() {
   local tmp
 
   session=$(tmux_get_current_session)
-  default_shell=$(basename "$(tmux_get_defaul_shell)")
+  default_shell=$(basename "$(tmux_get_default_shell)")
 
   if [[ -z "$default_shell" ]]
   then
