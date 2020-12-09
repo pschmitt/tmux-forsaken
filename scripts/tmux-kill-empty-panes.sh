@@ -30,6 +30,16 @@ tmux_kill_empty_panes() {
         echo -e "\e[91m  -> Kill pane $pane_id (Complexity: ${complexity})\e[0m" >&2
       fi
 
+      if [[ -z "$complexity" ]] || ! [[ "$complexity" =~ ^[0-9]+$ ]]
+      then
+        {
+          echo -e "\e[91mRating failed."
+          echo "Please re-run with DEBUG=1 and create a GitHub issue: "
+          echo -e "https://github.com/pschmitt/tmux-forsaken/issues/new\e[0m"
+        } >&2
+        return 3
+      fi
+
       if tmux kill-pane -t "$pane_id"
       then
         killed_panes+=("$pane_id")

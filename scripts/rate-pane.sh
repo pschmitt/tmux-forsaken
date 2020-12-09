@@ -52,7 +52,11 @@ tmux_rate_pane() {
   read -r pane_pid pane_cmd <<< "$(tmux_get_pane_cmd_info "$pane_id")"
 
   default_shell=$(tmux_get_default_shell --basename)
-  tmp=$(pstree -a -p -t "$pane_pid")
+  if ! tmp=$(pstree -a -p -t "$pane_pid")
+  then
+    echo "pstree failed" >&2
+    return 7
+  fi
 
   if [[ -n "$DEBUG" ]]
   then
