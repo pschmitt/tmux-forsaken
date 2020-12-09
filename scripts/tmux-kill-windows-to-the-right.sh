@@ -7,10 +7,10 @@ source "${CWD}/rate-pane.sh"
 # This will close all windows that are right to the current one
 # shellcheck disable=2120
 tmux_close_windows_to_the_right() {
-  local win_id
-  local safe_mode
   local complexity
   local is_active
+  local safe_mode
+  local win_id
 
   case "$1" in
     --safe|-s|--rate|-r)
