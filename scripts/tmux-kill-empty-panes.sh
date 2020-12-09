@@ -1,12 +1,8 @@
 #!/usr/bin/env bash
 
-tmux_get_option() {
-  tmux show-options -g | awk "/^${1} / {print \$2}"
-}
-
-tmux_get_default_shell() {
-  tmux_get_option "default-shell"
-}
+CWD="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=rate-pane.sh disable=1091
+source "${CWD}/rate-pane.sh"
 
 tmux_get_current_session() {
   tmux display-message -p '#S'
@@ -14,60 +10,35 @@ tmux_get_current_session() {
 
 tmux_kill_empty_panes() {
   local complexity
-  local default_shell
   local killed_panes=()
-  local max_complexity="${1:-4}"
-  local pane_cmd
   local pane_id
-  local pane_pid
   local session
-  local tmp
 
-  session=$(tmux_get_current_session)
-  default_shell=$(basename "$(tmux_get_default_shell)")
+  session="$(tmux_get_current_session)"
 
-  if [[ -z "$default_shell" ]]
-  then
-    echo "Failed to determine default-shell. Defaulting to bash." >&2
-    default_shell=bash
-  fi
-
-  while read -r _ pane_id pane_pid pane_cmd _ _
+  while read -r pane_id
   do
-    tmp=$(pstree -a -p -t "$pane_pid")
-
-    if [[ -n "$DEBUG" ]]
-    then
-      {
-        echo -e "\e[34mProcessing pane $pane_id (PID: $pane_pid) [CMD: ${pane_cmd}]\e[0m"
-        echo "$tmp"
-      } >&2
-    fi
-
-    complexity=$(wc -l <<< "$tmp")
-
-    if [[ "$pane_cmd" == "$default_shell" ]] && \
-       [[ "$complexity" -lt "$max_complexity" ]]
+    if complexity=$(tmux_rate_pane "$pane_id")
     then
       if [[ -n "$DEBUG" ]]
       then
-        echo -e "\e[91m\$ Kill pane $pane_id (Complexity: ${complexity})\e[0m" >&2
-      fi
-
-      if tmux kill-pane -t "$pane_id"
-      then
-        killed_panes+=("$pane_pid")
+        echo -e "\e[35m  -> SKIP (Complexity: $complexity)\e[0m" >&2
       fi
     else
       if [[ -n "$DEBUG" ]]
       then
-        echo -e "\e[35mSKIP (Complexity: $complexity)\e[0m\n" >&2
+        echo -e "\e[91m  -> Kill pane $pane_id (Complexity: ${complexity})\e[0m" >&2
+      fi
+
+      if tmux kill-pane -t "$pane_id"
+      then
+        killed_panes+=("$pane_id")
       fi
     fi
-  # The grep -v '1 1$' prevents us from killing the currently active pane
-  done < <(tmux list-panes -a \
-    -F '#S #D #{pane_pid} #{pane_current_command} #{pane_active} #{window_active}' | \
-    awk "/^${session} /" | grep -v '1 1$')
+  # The awk filter prevents us from killing the currently active pane
+  done < <(tmux list-panes -s -t "$session" \
+    -F '#{pane_id} #{pane_active} #{window_active}' | \
+    awk '!/1 1$/ { print $1 }')
 
   if [[ ${#killed_panes[@]} -gt 0 ]]
   then
