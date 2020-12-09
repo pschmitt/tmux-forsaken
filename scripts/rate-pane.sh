@@ -51,22 +51,22 @@ tmux_rate_pane() {
 
   read -r pane_pid pane_cmd <<< "$(tmux_get_pane_cmd_info "$pane_id")"
 
-  default_shell=$(tmux_get_default_shell --basename)
-  if ! tmp=$(pstree -a -p -t "$pane_pid")
+  if ! tmp="$(pstree -a -p -t "$pane_pid")"
   then
     echo "pstree failed" >&2
     return 7
   fi
 
+  default_shell="$(tmux_get_default_shell --basename)"
+  complexity=$(wc -l <<< "$tmp")
+
   if [[ -n "$DEBUG" ]]
   then
     {
       echo -e "\e[34mRating pane $pane_id (PID: $pane_pid) [CMD: ${pane_cmd}]\e[0m"
-      # echo "$tmp"
+      echo "$tmp"
     } >&2
   fi
-
-  complexity=$(wc -l <<< "$tmp")
 
   if [[ "$pane_cmd" == "$default_shell" ]] && \
      [[ "$complexity" -lt "$max_complexity" ]]
@@ -77,10 +77,7 @@ tmux_rate_pane() {
   # Return complexity
   echo "$complexity"
 
-  if [[ -n "$rating_failed" ]]
-  then
-    return 1
-  fi
+  [[ -z "$rating_failed" ]]
 }
 
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]

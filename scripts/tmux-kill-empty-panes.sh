@@ -18,7 +18,7 @@ tmux_kill_empty_panes() {
 
   while read -r pane_id
   do
-    if complexity=$(tmux_rate_pane "$pane_id")
+    if complexity="$(tmux_rate_pane "$pane_id")"
     then
       if [[ -n "$DEBUG" ]]
       then

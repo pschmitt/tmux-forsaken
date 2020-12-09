@@ -2,6 +2,7 @@
 
 tmux_kill_other_panes() {
   local pane_id
+
   for pane_id in $(tmux list-panes -F '#{pane_active} #{pane_id}' |
                    awk '!/^1 / { print $2 }')
   do
