@@ -10,7 +10,7 @@ tmux_get_current_session() {
 
 tmux_get_default_shell() {
   local default_shell
-  default_shell=$(tmux_get_option "default-shell")
+  default_shell="$(tmux_get_option "default-shell")"
 
   if [[ -z "$default_shell" ]]
   then
@@ -32,7 +32,7 @@ tmux_get_default_shell() {
 tmux_get_pane_cmd_info() {
   local pane_id="$1"
   local session
-  session="${2:-$(tmux_get_current_session)}"
+  session="${TMUX_SESSION:-${2:-$(tmux_get_current_session)}}"
 
   tmux list-panes -s -t "$session" \
     -F '#{pane_id} #{pane_pid} #{pane_current_command}' | \
